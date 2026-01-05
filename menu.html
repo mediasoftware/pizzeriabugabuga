@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Menu - Pizzeria Buga Buga</title>
+    <link rel="icon" href="logo_png.png" type="image/png">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Imperial+Script&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* --- CSS Variables & Reset --- */
+        :root {
+            --primary-color: #ff6b6b; /* Soft Red */
+            --primary-dark: #ee5253;
+            --secondary-color: #2d3436; /* Dark Slate */
+            --accent-color: #feca57; /* Warm Yellow */
+            --light-bg: #ffffff; /* White */
+            --card-bg: #ffffff;
+            --text-color: #2d3436;
+            --text-light: #636e72;
+            --border-radius: 16px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: var(--text-color);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Layout Utilities --- */
+        .container {
+            max-width: 95%;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(238, 82, 83, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(238, 82, 83, 0.6);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(240, 240, 240, 1);
+            padding: 15px 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            background: rgba(240, 240, 240, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+
+        .navbar .container {
+            max-width: 100%;
+            padding: 0 60px;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo {
+            font-family: "Imperial Script", system-ui, -apple-system, BlinkMacSystemFont;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: 700;
+            font-size: 1.8rem;
+            transition: var(--transition);
+            font-family: "Imperial Script", system-ui, -apple-system, BlinkMacSystemFont;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        /* --- Language Menu --- */
+        .lang-menu {
+            position: relative;
+            z-index: 1002;
+            margin-right: 15px;
+        }
+
+        .selected-lang {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .selected-lang:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            border-radius: 16px;
+            padding: 8px;
+            min-width: 140px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lang-menu:hover .lang-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .lang-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .lang-dropdown a:hover {
+            background: #fff0f0;
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        /* --- Scroll to Top Button --- */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(20px);
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        /* --- Modal --- */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
+        .modal-content { background-color: var(--card-bg); padding: 30px; border-radius: var(--border-radius); width: 90%; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+
+        /* --- Floating Cart Button --- */
+        .cart-float-btn {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 80px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1001;
+            cursor: pointer;
+            transition: var(--transition);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .cart-float-btn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--accent-color);
+            color: var(--secondary-color);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+        
+        /* --- Cart Modal Styles --- */
+        .cart-modal-content {
+            text-align: center;
+            max-width: 550px;
+            position: relative;
+        }
+        .cart-logo {
+            width: 80px;
+            margin-bottom: 10px;
+        }
+        .cart-items-list {
+            margin: 20px 0;
+            text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            font-size: 0.95rem;
+        }
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            border-top: 4px solid var(--primary-color);
+            padding-top: 10px;
+            color: var(--secondary-color);
+        }
+        .cart-footer-text {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        .cart-instruction-text {
+            border-top: 4px solid var(--primary-color);
+            border-bottom: 4px solid var(--primary-color);
+            padding: 15px 0;
+            margin: 15px 0;
+        }
+        .glovo-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #00a082;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+        .glovo-link:hover {
+            background-color: #f9f9f9;
+        }
+        .thank-you {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-top: 10px;
+        }
+        .close-modal-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+        .close-modal-btn:hover {
+            color: var(--primary-color);
+        }
+        .glovo-anim {
+            border: 4px solid transparent;
+            border-radius: 8px;
+            animation: borderPulse 2s infinite;
+        }
+        @keyframes borderPulse {
+            0% { border-color: transparent; }
+            50% { border-color: #FFCC1B; }
+            100% { border-color: transparent; }
+        }
+
+        /* --- Scroll Progress Bar --- */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            z-index: 2000;
+            background: transparent;
+        }
+
+        .progress-bar {
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+            width: 0%;
+            border-radius: 0 2px 2px 0;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .progress-bar.visible {
+            opacity: 1;
+        }
+
+        .modal-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            font-size: 2rem;
+            padding: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 50%;
+            z-index: 2001;
+            user-select: none;
+        }
+        .modal-nav-btn:hover { background: rgba(255,255,255,0.3); }
+        .prev-btn { left: 20px; }
+        .next-btn { right: 20px; }
+
+        /* --- Image Modal --- */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .image-modal.show {
+            opacity: 1;
+        }
+        .image-modal-content {
+            max-width: 98%;
+            max-height: 95vh;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            transform: scale(0.7);
+            transition: transform 0.3s ease;
+        }
+        .image-modal.show .image-modal-content {
+            transform: scale(1);
+        }
+        #imageCaption {
+            display: none;
+        }
+
+        /* --- Menu Layout --- */
+        .menu-header {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--secondary-color);
+            color: white;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 40px;
+        }
+
+        .menu-header h1 {
+            font-family: "Imperial Script", system-ui, -apple-system, BlinkMacSystemFont;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .menu-layout {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 60px;
+            align-items: flex-start;
+        }
+
+        /* Sidebar */
+        .menu-sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            position: sticky;
+            top: 100px;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .menu-sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+        .menu-sidebar::-webkit-scrollbar-thumb {
+            background-color: #ddd;
+            border-radius: 10px;
+        }
+
+        .category-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            background: transparent;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: var(--transition);
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .category-btn:hover {
+            background-color: #f0f0f0;
+            color: var(--primary-color);
+        }
+
+        .category-btn.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 10px rgba(238, 82, 83, 0.3);
+        }
+
+        .category-icon {
+            font-size: 1.2rem;
+            width: 25px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .menu-content {
+            flex-grow: 1;
+            min-width: 0; /* Prevents overflow issues */
+        }
+
+        .category-banner {
+            height: 250px;
+            width: 100%;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .category-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .category-banner-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+        }
+
+        .category-banner h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3.5rem;
+            margin: 0;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .category-banner h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 5px;
+            background-color: white;
+            border-radius: 2px;
+        }
+
+        .menu-section {
+            margin-bottom: 40px;
+        }
+
+        .menu-section-title {
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+            font-weight: 700;
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+        }
+
+        .menu-items-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .menu-item-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.05);
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .menu-item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+
+        .menu-item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .menu-item-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+
+        .menu-item-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            line-height: 1.3;
+        }
+
+        .menu-item-price {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            white-space: nowrap;
+        }
+
+        .menu-item-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 10px;
+            background: white;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: auto;
+        }
+
+        .add-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 60px 0 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .footer-column {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            flex: 1;
+        }
+
+        .footer-column h3 {
+            color: var(--accent-color);
+            font-size: 2rem;
+            margin-bottom: 25px;
+            font-family: "Imperial Script", system-ui, -apple-system, BlinkMacSystemFont;
+            text-transform: none;
+            letter-spacing: 1px;
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+            color: #ddd;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 5px;
+        }
+
+        .footer-column ul li.today {
+            color: var(--accent-color);
+            font-weight: bold;
+            border-bottom: 1px solid var(--accent-color);
+        }
+
+        .footer-column p {
+            color: #ddd;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            text-align: center;
+            color: #aaa;
+        }
+
+        .payment-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .payment-logos img {
+            height: 25px;
+            width: auto;
+            border-radius: 4px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 992px) {
+            .menu-layout {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .menu-sidebar {
+                width: 100%;
+                max-height: none;
+                position: static;
+                display: flex;
+                overflow-x: auto;
+                padding: 15px;
+                gap: 10px;
+                background: white;
+                z-index: 900;
+            }
+
+            .category-btn {
+                width: auto;
+                white-space: nowrap;
+                flex-shrink: 0;
+                margin-bottom: 0;
+                padding: 10px 20px;
+            }
+            
+            .menu-items-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .navbar .container { padding: 0 20px; }
+            
+            /* Mobile Nav */
+            .menu-toggle { display: flex; }
+            
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                gap: 20px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                transition: 0.4s ease-in-out;
+                transform: none;
+            }
+
+            .nav-links.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+            
+            .nav-links li { width: 100%; text-align: center; }
+            .footer-content { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Scroll Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="scrollProgressBar"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo"><img src="logo_png.png" alt="Pizzeria Buga Buga" style="height: 80px; width: 100px; margin-left: 50px;"></a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#" style="color: var(--primary-color);">Menu</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="index.html#events">Event</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="lang-menu">
+                <div class="selected-lang">
+                    <i class="fas fa-globe"></i> EN
+                </div>
+                <div class="lang-dropdown">
+                    <a href="#">English</a>
+                    <a href="#">Français</a>
+                    <a href="#">العربية</a>
+                </div>
+            </div>
+            <button class="menu-toggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Menu Header -->
+    <div class="menu-header">
+        <div class="container">
+            <h1>Our Menu</h1>
+            <p>Enjoy a unique culinary experience in the heart of Tangier</p>
+        </div>
+    </div>
+
+    <!-- Main Menu Layout -->
+    <div class="container">
+        <div class="menu-layout">
+            <!-- Sidebar -->
+            <aside class="menu-sidebar" id="categorySidebar">
+                <!-- Categories injected via JS -->
+            </aside>
+
+            <!-- Content Area -->
+            <main class="menu-content" id="menuContent">
+                <!-- Content injected via JS -->
+            </main>
+        </div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTopBtn" class="scroll-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Floating Cart Button -->
+    <div id="floatCartBtn" class="cart-float-btn" onclick="openCartModal()">
+        <i class="fas fa-clipboard-list"></i>
+        <span class="cart-count" id="cartCount">0</span>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <!-- Left: Contact Us -->
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <p><strong>Pizzeria Buga Buga</strong></p>
+                    <p>📍 gh2 ma.6, 2 res assafae 2<br>azibou1, Tanger 90000</p>
+                    <p>📞 0531-284484</p>
+                    <button class="btn btn-primary" onclick="openContactModal()" style="margin-top: 15px; width: 100%;">Contact Us</button>
+                    <div style="margin-top: 20px; display: flex; gap: 20px; justify-content: center;">
+                        <a href="https://www.facebook.com/profile.php?id=61581140463045" target="_blank" style="color: white; font-size: 1.8rem; text-decoration: none;"><i class="fab fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/pizzeriabugabuga/" target="_blank" style="color: white; font-size: 1.8rem; text-decoration: none;"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <!-- Center: Opening Hours -->
+                <div class="footer-column">
+                    <h3>Opening Hours</h3>
+                    <ul>
+                        <li data-day="1"><span>Monday</span> <span>8h - 00h</span></li>
+                        <li data-day="2"><span>Tuesday</span> <span>8h - 00h</span></li>
+                        <li data-day="3"><span>Wednesday</span> <span>8h - 00h</span></li>
+                        <li data-day="4"><span>Thursday</span> <span>8h - 00h</span></li>
+                        <li data-day="5"><span>Friday</span> <span>8h - 1h</span></li>
+                        <li data-day="6"><span>Saturday</span> <span>8h - 1h</span></li>
+                        <li data-day="0"><span>Sunday</span> <span>8h - 00h</span></li>
+                    </ul>
+                </div>
+
+                <!-- Right: Delivery & Payment -->
+                <div class="footer-column">
+                    <h3>Delivery Service</h3>
+                    <p>Order online and get it delivered to your doorstep.</p>
+                    <a href="https://glovoapp.com" target="_blank" class="btn btn-primary" style="margin-bottom: 30px; width: 100%;">Order on Glovo</a>
+                    
+                    <h3>Payment Methods</h3>
+                    <div class="payment-logos">
+                        <img src="zarka-200.webp" alt="Cash Payment">
+                        <img src="MasterCard_Logo.png" alt="MasterCard">
+                        <img src="VISA-logo.jpg" alt="Visa">
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 Pizzeria Buga Buga. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content cart-modal-content">
+            <span class="close-modal-btn" onclick="closeCartModal()"><i class="fas fa-times"></i></span>
+            <div class="cart-header">
+                <img src="logo_buga buga.png" alt="Logo" class="cart-logo">
+                <h2 style="font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: var(--secondary-color); text-align: left; border-bottom: 3px solid black; padding-bottom: 5px; margin-bottom: 15px; width: fit-content;">Your Order :</h2>
+            </div>
+            <div id="cartItemsList" class="cart-items-list">
+                <!-- Items injected here -->
+            </div>
+            <div class="cart-total" id="cartTotalContainer">
+                <span>Total</span>
+                <span id="cartTotalValue">0.00DH</span>
+            </div>
+            <div class="cart-footer-text">
+                <div class="cart-instruction-text">
+                    <p style="font-size: 1.2rem;">Have you finished your selection? Call the waiter and place your order.</p>
+                </div>
+                <p style="margin-top: 15px; font-weight: bold; font-size: 1.2rem;">Or to deliver your order to your home use:</p>
+                <a href="https://glovoapp.com" target="_blank" class="glovo-link" style="border: none; background: transparent;">
+                    <img src="glovo.svg" alt="Glovo" style="height: 60px;" class="glovo-anim">
+                </a>
+                <p class="thank-you">Thank you for your visit!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="image-modal">
+        <span class="close-modal-btn" onclick="closeImageModal()" style="color: white; font-size: 2rem; top: 20px; right: 30px; position: absolute;">&times;</span>
+        <img class="image-modal-content" id="expandedImage">
+        <button class="modal-nav-btn prev-btn" onclick="changeImage(-1)">&#10094;</button>
+        <button class="modal-nav-btn next-btn" onclick="changeImage(1)">&#10095;</button>
+        <div id="imageCaption"></div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <h2 style="margin-bottom: 20px; color: var(--secondary-color);">Get in Touch</h2>
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
+                <a href="https://wa.me/212631154799" target="_blank" class="btn" style="background-color: #25D366; color: white; min-width: 160px;">
+                    <i class="fab fa-whatsapp" style="font-size: 1.2rem;"></i> WhatsApp
+                </a>
+                <a href="tel:+212531284484" class="btn" style="background-color: #3498db; color: white; min-width: 160px;">
+                    <i class="fas fa-phone-alt" style="font-size: 1.2rem;"></i> Call Now
+                </a>
+            </div>
+            <button class="btn btn-outline" onclick="closeContactModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Menu Data ---
+        const menuData = [
+            {
+                id: 'breakfasts',
+                name: 'Breakfasts',
+                icon: '☕',
+                image: 'https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=1000&q=80',
+                items: [
+                    { name: "Napoleon Breakfast", desc: "4 croissants, amlou, jam, and cake. Includes orange juice, coffee/tea, water, fruit-infused chiya, and three tasting juices.", price: 49, image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Moroccan Breakfast", desc: "Baghrir, Harsha, Reghayef, Melawi, local cheese, butter, amlou, jam. Includes orange juice, coffee/tea, water, fruit-infused chiya, and three tasting juices.", price: 59, image: "https://images.unsplash.com/photo-1541518763669-27fef04b14ea?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Chamali Breakfast", desc: "Two eggs, local cheese, cheese, smoked turkey, small salad. Includes orange juice, coffee/tea, water, fruit-infused chiya, and three tasting juices.", price: 59, image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Fassi Breakfast", desc: "Two fried eggs, dried meat, small salad. Includes orange juice, coffee/tea, water, fruit-infused chiya, and three tasting juices.", price: 59, image: "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Spanish Breakfast", desc: "Toast with cheese and salad, tomato purée, lots of olives. Includes orange juice, coffee/tea, water, fruit-infused chiya, and three tasting juices.", price: 59, image: "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Dutch Breakfast", desc: "Two toasts, cheese, smoked turkey, eggs, small salad. Includes orange juice, coffee/tea, water, fruit-infused chiya, and three tasting juices.", price: 59, image: "https://images.unsplash.com/photo-1513442542250-854d436a73f2?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Catalan Breakfast", desc: "Includes orange juice, coffee/tea, water, fruit-infused chiya, and three tasting juices.", price: 64, image: "https://images.unsplash.com/photo-1496042399014-dc73c4f2bde1?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Catalan Breakfast with Eggs", desc: "Includes 2 toasts with tomato sauce, 2 eggs, cheese, tuna, avocado slices, olives, a small salad, three juices, orange juice, coffee or tea, a bottle of water, and fruit-infused chiya.", price: 69, image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Double Catalan Breakfast", desc: "Double portion of the Catalan breakfast.", price: 84, image: "https://images.unsplash.com/photo-1496042399014-dc73c4f2bde1?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Crunchy Breakfast", desc: "Toast topped with eggs, cheese, smoked turkey, mozzarella, pastrami, small salad. Includes orange juice, coffee/tea, water, fruit-infused chiya, and three tasting juices.", price: 64, image: "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Turkish Breakfast", desc: "Egg, tomato sauce, sucuk, cheese, small salad. Includes orange juice, coffee/tea, water, fruit-infused chiya, and three tasting juices.", price: 69, image: "https://images.unsplash.com/photo-1593584785033-9c7604d0863f?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Dubai Breakfast", desc: "Cucumber toast, hard-boiled egg, cheese, smoked turkey, mayonnaise. Includes orange juice, coffee/tea, water, fruit-infused chiya, and three tasting juices.", price: 69, image: "https://images.unsplash.com/photo-1542282811-943ef1a977c3?auto=format&fit=crop&w=500&q=60" },
+                    { name: "English Breakfast", desc: "Two eggs, sausage, baked beans in tomato sauce, grilled tomatoes, pastrami, small salad. Includes orange juice, coffee/tea, water, fruit-infused chiya, and three tasting juices.", price: 84, image: "https://images.unsplash.com/photo-1533089862017-5614ec87e284?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Scrambled Breakfast", desc: "Breakfast with scrambled eggs.", price: 79, image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Buga Buga Breakfast", desc: "This breakfast combines two styles: Catalan and scrambled. Includes 2 delicious bite-sized eggs, cheese, tuna, lettuce, avocado slices, small salad, three juices, orange juice, coffee or tea, a bottle of water, and fruit-infused chiya.", price: 89, image: "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=500&q=60" }
+                ]
+            },
+            {
+                id: 'croissants',
+                name: 'Croissants',
+                icon: '🥐',
+                image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=1000&q=80',
+                items: [
+                    { name: "Croissant with Eggs and Smoked Turkey", desc: "Croissant filled with eggs and smoked turkey.", price: 24, image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Eggs Benedict Croissant", desc: "Croissant filled with Benedict-style eggs.", price: 29, image: "https://images.unsplash.com/photo-1608039755401-742074f0548d?auto=format&fit=crop&w=500&q=60" }
+                ]
+            },
+            {
+                id: 'croques',
+                name: 'Croques',
+                icon: '🍳',
+                image: 'https://images.unsplash.com/photo-1621800043295-a73fe2f7e86c?auto=format&fit=crop&w=1000&q=80',
+                items: [
+                    { name: "Cheese Croque", desc: "Grilled cheese sandwich.", price: 29, image: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Smoked Turkey Croque", desc: "Grilled sandwich with smoked turkey.", price: 34, image: "https://images.unsplash.com/photo-1553909489-cd47e3b4430f?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Hollandaise Croque", desc: "Grilled Hollandaise sandwich.", price: 34, image: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Smoked Turkey & Cheese Croque", desc: "Grilled sandwich with smoked turkey and cheese.", price: 34, image: "https://images.unsplash.com/photo-1621800043295-a73fe2f7e86c?auto=format&fit=crop&w=500&q=60" }
+                ]
+            },
+            {
+                id: 'omelettes',
+                name: 'Omelettes',
+                icon: '🍳',
+                image: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=1000&q=80',
+                items: [
+                    { name: "Plain Omelette", desc: "Classic omelette.", price: 24, image: "https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Cheese Omelette", desc: "Omelette filled with cheese.", price: 29, image: "https://images.unsplash.com/photo-1587486913049-53fc88980cfc?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Mushroom Omelette", desc: "Omelette filled with mushrooms.", price: 34, image: "https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Vegetarian Omelette", desc: "Meat-free omelette.", price: 34, image: "https://images.unsplash.com/photo-1587486913049-53fc88980cfc?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Smoked Turkey & Cheese Omelette", desc: "Omelette with smoked turkey and cheese.", price: 34, image: "https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Tuna Omelette", desc: "Omelette filled with tuna.", price: 39, image: "https://images.unsplash.com/photo-1587486913049-53fc88980cfc?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Seafood Omelette", desc: "Omelette filled with seafood.", price: 54, image: "https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=500&q=60" }
+                ]
+            },
+            {
+                id: 'baghrirs',
+                name: 'Baghrirs',
+                icon: '🌖',
+                image: 'https://images.unsplash.com/photo-1589301760574-d816c1547a2d?auto=format&fit=crop&w=1000&q=80',
+                items: [
+                    { name: "Nutella Baghrir", desc: "Baghrir filled with Nutella.", price: 39, image: "https://images.unsplash.com/photo-1589301760574-d816c1547a2d?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Amlou Baghrir", desc: "Baghrir filled with amlou.", price: 44, image: "https://images.unsplash.com/photo-1589301760574-d816c1547a2d?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Special Amlou Baghrir", desc: "Baghrir filled with special amlou.", price: 69, image: "https://images.unsplash.com/photo-1589301760574-d816c1547a2d?auto=format&fit=crop&w=500&q=60" }
+                ]
+            },
+            {
+                id: 'pancakes',
+                name: 'Pancakes',
+                icon: '🥞',
+                image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=1000&q=80',
+                items: [
+                    { name: "Almond Pancake", desc: "Pancake topped with almonds.", price: 39, image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Nutella Pancake", desc: "Pancake topped with Nutella.", price: 44, image: "https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Special Almond Pancake", desc: "Pancake topped with a special selection of almonds.", price: 69, image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=500&q=60" }
+                ]
+            },
+            {
+                id: 'toasts',
+                name: 'Toasts',
+                icon: '🍞',
+                image: 'https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1000&q=80',
+                items: [
+                    { name: "Cheese Toast", desc: "Toast topped with cheese.", price: 24, image: "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Smoked Turkey & Cheese Toast", desc: "Toast topped with smoked turkey and cheese.", price: 29, image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=500&q=60" }
+                ]
+            },
+            {
+                id: 'tagines',
+                name: 'Tagines',
+                icon: '🥘',
+                image: 'https://images.unsplash.com/photo-1541518763669-27fef04b14ea?auto=format&fit=crop&w=1000&q=80',
+                items: [
+                    { name: "Pilpil Tagine", desc: "Tagine flavored with pilpil spice.", price: 69, image: "https://images.unsplash.com/photo-1511690656952-34342d5c28b5?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Rigamonte Tagine", desc: "Buga Buga signature tagine.", price: 74, image: "https://images.unsplash.com/photo-1580248346286-63a037233176?auto=format&fit=crop&w=500&q=60" }
+                ]
+            },
+            {
+                id: 'salads',
+                name: 'Salads',
+                icon: '🥗',
+                image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1000&q=80',
+                items: [
+                    { name: "Niçoise Salad", desc: "Classic Niçoise salad.", price: 49, image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Caesar Salad", desc: "Delicious Caesar salad.", price: 59, image: "https://images.unsplash.com/photo-1550304943-4f24f54ddde9?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Avocado-Mango-Shrimp Salad", desc: "Fresh salad with avocado, mango, and shrimp.", price: 79, image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Buga Buga Salad", desc: "Buga Buga signature salad.", price: 89, image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=500&q=60" }
+                ]
+            },
+            {
+                id: 'starters',
+                name: 'Starters',
+                icon: '🍽️',
+                image: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=1000&q=80',
+                sections: [
+                    {
+                        title: "Dishes",
+                        items: [
+                            { name: "Nuggets", desc: "Breaded and fried chicken pieces.", price: 79, image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Cordon Bleu", desc: "Breaded chicken breast stuffed with cheese and fried.", price: 84, image: "https://images.unsplash.com/photo-1632778149955-e80f8ceca2e8?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Chicken Strips", desc: "Fried chicken strips.", price: 84, image: "https://images.unsplash.com/photo-1615557960916-5f4791effe9d?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Chicken in Sauce", desc: "Chicken cooked in a savory sauce.", price: 84, image: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Crispy Chicken", desc: "Breaded and fried chicken for perfect crispiness.", price: 84, image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Chili Chicken", desc: "Spicy stir-fried chicken with chili sauce.", price: 84, image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Chicken Onion", desc: "Tender chicken stewed with caramelized onions and mild spices.", price: 84, image: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Chicken Fakhita", desc: "Mexican-style marinated chicken.", price: 84, image: "https://images.unsplash.com/photo-1534352956036-cd81e27dd615?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Chicken Wings", desc: "Crispy chicken wings served with barbecue or spicy sauce.", price: 84, image: "https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Chicken Mixte", desc: "Gourmet chicken assortment: wings, fajita, and chili—perfect for enthusiasts.", price: 99, image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=500&q=60" }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'italian',
+                name: 'Italian',
+                icon: '🇮🇹',
+                image: 'https://images.unsplash.com/photo-1595295333158-4742f28fbd85?auto=format&fit=crop&w=1000&q=80',
+                sections: [
+                    {
+                        title: "Pizza",
+                        items: [
+                            { name: "Margherita Pizza", desc: "Classic pizza with tomatoes, mozzarella, and basil.", price: 39, image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Vegetarian Pizza", desc: "Pizza topped with fresh vegetables.", price: 44, image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Chicken Pizza", desc: "Pizza topped with chicken pieces.", price: 54, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Tuna Pizza", desc: "Pizza topped with tuna.", price: 54, image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Pepperoni Pizza", desc: "Pizza topped with pepperoni.", price: 54, image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Four Cheese Pizza", desc: "Pizza topped with four types of cheese.", price: 59, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Minced Meat Pizza", desc: "Pizza topped with minced meat.", price: 59, image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Half-and-Half Pizza", desc: "Pizza with two different toppings.", price: 69, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Quattro Stagioni Pizza", desc: "Pizza topped with four seasonal ingredients.", price: 69, image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Seafood Pizza", desc: "Pizza topped with seafood.", price: 74, image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Royal Pizza", desc: "Pizza topped with several premium ingredients.", price: 89, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=500&q=60" }
+                        ]
+                    },
+                    {
+                        title: "Pasticcio",
+                        items: [
+                            { name: "Smoked Turkey Pasticcio", desc: "Pasticcio filled with smoked turkey.", price: 44, image: "https://images.unsplash.com/photo-1612874742237-6526221588e3?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Chicken Pasticcio", desc: "Pasticcio filled with chicken.", price: 49, image: "https://images.unsplash.com/photo-1612874742237-6526221588e3?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Minced Meat Pasticcio", desc: "Pasticcio filled with minced meat.", price: 54, image: "https://images.unsplash.com/photo-1612874742237-6526221588e3?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Mixed Pasticcio", desc: "Pasticcio filled with a mix of ingredients.", price: 59, image: "https://images.unsplash.com/photo-1612874742237-6526221588e3?auto=format&fit=crop&w=500&q=60" }
+                        ]
+                    },
+                    {
+                        title: "Pasta",
+                        items: [
+                            { name: "Tuna Pasta", desc: "Pasta topped with tuna.", price: 59, image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Chicken Pasta", desc: "Pasta topped with chicken.", price: 64, image: "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Minced Meat Pasta", desc: "Pasta topped with minced meat.", price: 69, image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Seafood Pasta", desc: "Pasta topped with seafood.", price: 89, image: "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=500&q=60" }
+                        ]
+                    },
+                    {
+                        title: "Panini",
+                        items: [
+                            { name: "Tuna Panini", desc: "Panini filled with tuna.", price: 39, image: "https://images.unsplash.com/photo-1509722747741-0903d005d2eb?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Minced Meat Panini", desc: "Panini filled with minced meat.", price: 44, image: "https://images.unsplash.com/photo-1509722747741-0903d005d2eb?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Chicken Panini", desc: "Panini filled with chicken.", price: 44, image: "https://images.unsplash.com/photo-1509722747741-0903d005d2eb?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Mixed Panini", desc: "Panini filled with a mix of ingredients.", price: 54, image: "https://images.unsplash.com/photo-1509722747741-0903d005d2eb?auto=format&fit=crop&w=500&q=60" }
+                        ]
+                    },
+                    {
+                        title: "Lasagna",
+                        items: [
+                            { name: "Minced Meat Lasagna", desc: "Lasagna filled with minced meat.", price: 59, image: "https://images.unsplash.com/photo-1574868235814-1d335de8e5b9?auto=format&fit=crop&w=500&q=60" }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'fastfood',
+                name: 'Fast Food',
+                icon: '🍔',
+                image: 'https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=1000&q=80',
+                sections: [
+                    {
+                        title: "Savory Crêpes",
+                        items: [
+                            { name: "Cheese Crêpe", desc: "Crêpe filled with cheese.", price: 39, image: "https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Smoked Turkey & Cheese Crêpe", desc: "Crêpe filled with smoked turkey and cheese.", price: 49, image: "https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Chicken & Cheese Crêpe", desc: "Crêpe filled with chicken and cheese.", price: 59, image: "https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=500&q=60" }
+                        ]
+                    },
+                    {
+                        title: "Sandwich",
+                        items: [
+                            { name: "Tuna Club Sandwich", desc: "Club sandwich filled with tuna.", price: 44, image: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Chicken Club Sandwich", desc: "Club sandwich filled with chicken.", price: 49, image: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=500&q=60" }
+                        ]
+                    },
+                    {
+                        title: "Burger",
+                        items: [
+                            { name: "Chicken Burger", desc: "Burger filled with chicken.", price: 39, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Crispy Chicken Burger", desc: "Burger filled with crispy chicken.", price: 44, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Volcano Cheese Burger", desc: "Burger filled with melted cheese.", price: 44, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Royal Burger", desc: "Burger filled with several premium ingredients.", price: 54, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Double Crispy Chicken Burger", desc: "Double burger filled with crispy chicken.", price: 64, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Double Burger", desc: "Double burger filled with various ingredients.", price: 64, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=60" }
+                        ]
+                    },
+                    {
+                        title: "Wraps",
+                        items: [
+                            { name: "Tuna Wrap", desc: "Wrap filled with tuna.", price: 44, image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Chicken Wrap", desc: "Wrap filled with chicken.", price: 44, image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Spicy Chicken Wrap", desc: "Wrap filled with spicy chicken.", price: 44, image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Mixed Wrap", desc: "Wrap filled with a mix of ingredients.", price: 49, image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=500&q=60" }
+                        ]
+                    },
+                    {
+                        title: "Tacos",
+                        items: [
+                            { name: "Chicken Tacos", desc: "Tacos filled with chicken.", price: 44, image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Cordon Bleu Tacos", desc: "Tacos filled with Cordon Bleu.", price: 49, image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Chicken Nuggets Tacos", desc: "Tacos filled with chicken nuggets.", price: 49, image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Minced Meat Tacos", desc: "Tacos filled with minced meat.", price: 49, image: "https://images.unsplash.com/photo-1613514785940-daed07799d9b?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Mixed Tacos", desc: "Tacos filled with a mix of ingredients.", price: 54, image: "https://images.unsplash.com/photo-1552332386-f8dd00d59226?auto=format&fit=crop&w=500&q=60" }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'desserts',
+                name: 'Desserts',
+                icon: '🍰',
+                image: 'https://images.unsplash.com/photo-1563729768-6af7c46d66c1?auto=format&fit=crop&w=1000&q=80',
+                sections: [
+                    {
+                        title: "Chia-Fruit",
+                        items: [
+                            { name: "Chia with Dried Fruits", desc: "Chia seeds with dried fruits.", price: 34, image: "https://images.unsplash.com/photo-1623428187969-5da2dcea5ebf?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Chia with Red Fruits", desc: "Chia seeds with red fruits.", price: 34, image: "https://images.unsplash.com/photo-1623428187969-5da2dcea5ebf?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Buga Buga Chia", desc: "Chia seeds with Buga Buga mix.", price: 44, image: "https://images.unsplash.com/photo-1623428187969-5da2dcea5ebf?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Mixed Fruit Plate for 1 Person", desc: "Mixed fruit plate for one person.", price: 54, image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Special Chia", desc: "Special dish with chia seeds.", price: 69, image: "https://images.unsplash.com/photo-1623428187969-5da2dcea5ebf?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Mixed Fruit Plate for 2 People", desc: "Mixed fruit plate for two people.", price: 79, image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=500&q=60" }
+                        ]
+                    },
+                    {
+                        title: "Cakes",
+                        items: [
+                            { name: "Flan", desc: "Tourron flan.", price: 24, image: "https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Oreo Cake", desc: "Cake made with Oreo cookies.", price: 24, image: "https://images.unsplash.com/photo-1562772386-b7234c986f43?auto=format&fit=crop&w=500&q=60" },
+                            { name: "Lemon Cake", desc: "Lemon-flavored cake.", price: 24, image: "https://images.unsplash.com/photo-1519340333755-56e9c1d04579?auto=format&fit=crop&w=500&q=60" }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'drinks',
+                name: 'Drinks',
+                icon: '🥤',
+                image: 'https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=1000&q=80',
+                items: [
+                    { name: "Mineral Water", desc: "Refreshing mineral water.", price: 10, image: "https://images.unsplash.com/photo-1564419320461-6870880221ad?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Sparkling Water", desc: "Carbonated mineral water.", price: 15, image: "https://images.unsplash.com/photo-1603394630850-69b3ca8121ca?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Soda", desc: "Coca-Cola, Sprite, Fanta, etc.", price: 15, image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Fresh Orange Juice", desc: "Freshly squeezed orange juice.", price: 20, image: "https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Lemonade", desc: "Refreshing lemon drink.", price: 20, image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Mojito", desc: "Classic mint and lime mojito.", price: 30, image: "https://images.unsplash.com/photo-1551538827-9c037cb4f32d?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Coffee", desc: "Espresso or Americano.", price: 15, image: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Moroccan Tea", desc: "Traditional mint tea.", price: 15, image: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=500&q=60" }
+                ]
+            },
+            {
+                id: 'extras',
+                name: 'Extras',
+                icon: '🍹',
+                image: 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?auto=format&fit=crop&w=1000&q=80',
+                items: [
+                    { name: "French Fries", desc: "Crispy golden fries.", price: 20, image: "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Cheese Supplement", desc: "Extra cheese for your meal.", price: 10, image: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Sauce Supplement", desc: "Extra sauce of your choice.", price: 5, image: "https://images.unsplash.com/photo-1472476443507-c7a392dd8cee?auto=format&fit=crop&w=500&q=60" },
+                    { name: "Bread Basket", desc: "Freshly baked bread.", price: 10, image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=500&q=60" }
+                ]
+            }
+        ];
+
+        // --- DOM Elements ---
+        const sidebar = document.getElementById('categorySidebar');
+        const content = document.getElementById('menuContent');
+
+        // --- Render Functions ---
+        function renderSidebar() {
+            sidebar.innerHTML = menuData.map((cat, index) => `
+                <button class="category-btn ${index === 0 ? 'active' : ''}" onclick="selectCategory('${cat.id}')">
+                    <span class="category-icon">${cat.icon}</span> ${cat.name}
+                </button>
+            `).join('');
+        }
+
+        function renderContent(categoryId) {
+            const category = menuData.find(c => c.id === categoryId);
+            if (!category) return;
+
+            // Update active button
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = Array.from(document.querySelectorAll('.category-btn')).find(btn => btn.textContent.includes(category.name));
+            if(activeBtn) activeBtn.classList.add('active');
+
+            let html = `
+                <div class="category-banner">
+                    <img src="${category.image}" alt="${category.name}">
+                    <div class="category-banner-overlay">
+                        <h2>${category.name}</h2>
+                    </div>
+                </div>
+            `;
+
+            if (category.sections) {
+                // Render sections (for Italian, Fast Food, etc.)
+                category.sections.forEach(section => {
+                    html += `
+                        <div class="menu-section">
+                            <h3 class="menu-section-title">${section.title}</h3>
+                            <div class="menu-items-grid">
+                                ${section.items.map(item => createItemCard(item)).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+            } else if (category.items && category.items.length > 0) {
+                // Render flat list
+                html += `
+                    <div class="menu-items-grid">
+                        ${category.items.map(item => createItemCard(item)).join('')}
+                    </div>
+                `;
+            } else {
+                html += `<p style="text-align:center; color: #777;">No items available in this category yet.</p>`;
+            }
+
+            content.innerHTML = html;
+            
+            // Scroll to top of content on mobile
+            if(window.innerWidth <= 992) {
+                window.scrollTo({ top: content.offsetTop - 100, behavior: 'smooth' });
+            }
+        }
+
+        function createItemCard(item) {
+            const image = item.image || 'https://placehold.co/600x400?text=' + encodeURIComponent(item.name);
+            const safeName = item.name.replace(/'/g, "\\'");
+            return `
+                <div class="menu-item-card">
+                    <img src="${image}" alt="${item.name}" class="menu-item-image" onclick="openImageModal('${image}', '${safeName}')" style="cursor: pointer;">
+                    <div class="menu-item-content">
+                    <div class="menu-item-header">
+                        <div class="menu-item-title">${item.name}</div>
+                        <div class="menu-item-price">${item.price} Dh</div>
+                    </div>
+                    <div class="menu-item-desc">${item.desc}</div>
+                    <button class="add-btn" onclick="addToCart('${safeName}', ${item.price})">+ Add to Order</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectCategory(id) {
+            renderContent(id);
+        }
+
+        // --- Mobile Menu Toggle ---
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+
+        // --- Navbar Scroll Effect ---
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 10) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // --- Scroll Progress Bar Logic ---
+        const progressBar = document.getElementById("scrollProgressBar");
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            
+            if (progressBar) {
+                progressBar.style.width = scrolled + "%";
+                if (winScroll > 0) {
+                    progressBar.classList.add('visible');
+                } else {
+                    progressBar.classList.remove('visible');
+                }
+            }
+        });
+
+        // --- Scroll to Top Logic ---
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+        if (scrollToTopBtn) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    scrollToTopBtn.classList.add('visible');
+                } else {
+                    scrollToTopBtn.classList.remove('visible');
+                }
+            });
+            scrollToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // --- Footer Highlight ---
+        const today = new Date().getDay();
+        const dayItem = document.querySelector(`.footer-column ul li[data-day="${today}"]`);
+        if (dayItem) dayItem.classList.add('today');
+
+        // --- Contact Modal Logic ---
+        function openContactModal() {
+            document.getElementById('contactModal').style.display = "flex";
+        }
+        function closeContactModal() {
+            document.getElementById('contactModal').style.display = "none";
+        }
+        window.onclick = function(event) {
+            const contactModal = document.getElementById('contactModal');
+            const cartModal = document.getElementById('cartModal');
+            const imageModal = document.getElementById('imageModal');
+            if (event.target == contactModal) closeContactModal();
+            if (event.target == cartModal) closeCartModal();
+            if (event.target == imageModal) closeImageModal();
+        }
+
+        // --- Cart Logic ---
+        let cartCount = 0;
+        let cartItems = [];
+        const cartBtn = document.getElementById('floatCartBtn');
+        const cartCountSpan = document.getElementById('cartCount');
+
+        function addToCart(name, price) {
+            cartItems.push({ name: name, price: price });
+            cartCount++;
+            cartCountSpan.textContent = cartCount;
+            cartBtn.classList.add('visible');
+            
+            // Pulse animation
+            cartBtn.style.transform = 'translateY(-50%) scale(1.1)';
+            setTimeout(() => {
+                cartBtn.style.transform = 'translateY(-50%) scale(1)';
+            }, 200);
+        }
+
+        function openCartModal() {
+            const list = document.getElementById('cartItemsList');
+            const totalEl = document.getElementById('cartTotalValue');
+            const totalContainer = document.getElementById('cartTotalContainer');
+            
+            list.innerHTML = '';
+            let total = 0;
+            
+            if (cartItems.length === 0) {
+                list.innerHTML = '<p style="text-align:center; color:var(--text-light); font-weight:bold; margin: 20px 0;">0 Commandes - 0 Pedidos - 0 Orders</p>';
+            }
+            
+            cartItems.forEach((item, index) => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'cart-item';
+                itemEl.innerHTML = `
+                    <span style="font-size: 1.1rem;">${item.name}</span>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="font-weight: bold;">${item.price} DH</span>
+                        <i class="fas fa-trash-alt" style="color:#ff6b6b; cursor:pointer;" onclick="removeFromCart(${index})"></i>
+                    </div>`;
+                list.appendChild(itemEl);
+                total += item.price;
+            });
+            
+            totalEl.textContent = total.toFixed(2) + 'DH';
+            
+            // Show total if more than 2 items (or always, based on example provided)
+            // Following the example which shows total even for 1 item, we keep it visible.
+            
+            document.getElementById('cartModal').style.display = 'flex';
+        }
+
+        function removeFromCart(index) {
+            cartItems.splice(index, 1);
+            cartCount--;
+            document.getElementById('cartCount').textContent = cartCount;
+            if (cartCount === 0) {
+                document.getElementById('floatCartBtn').classList.remove('visible');
+            }
+            openCartModal();
+        }
+
+        function closeCartModal() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        // --- Image Modal Logic ---
+        let currentImageIndex = 0;
+        let galleryImages = [];
+
+        function openImageModal(src, alt) {
+            // Collect all zoomable images currently in the DOM
+            const items = document.querySelectorAll('.menu-item-image');
+            galleryImages = Array.from(items).map(item => ({
+                src: item.src,
+                alt: item.alt
+            }));
+
+            // Find index of clicked image
+            currentImageIndex = galleryImages.findIndex(img => img.src === src);
+            if (currentImageIndex === -1) currentImageIndex = 0;
+
+            updateModalImage();
+
+            const modal = document.getElementById('imageModal');
+            modal.style.display = "flex";
+            // Small delay to allow display:flex to apply before adding opacity class for transition
+            setTimeout(() => modal.classList.add('show'), 10);
+        }
+
+        function changeImage(direction) {
+            currentImageIndex = (currentImageIndex + direction + galleryImages.length) % galleryImages.length;
+            updateModalImage();
+        }
+
+        function updateModalImage() {
+            const img = document.getElementById('expandedImage');
+            const caption = document.getElementById('imageCaption');
+            img.src = galleryImages[currentImageIndex].src;
+            caption.textContent = galleryImages[currentImageIndex].alt;
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = "none", 300);
+        }
+
+        // --- Init ---
+        renderSidebar();
+        renderContent('breakfasts'); // Default category
+
+    </script>
+</body>
+</html>

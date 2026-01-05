@@ -1,0 +1,2064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzeria Buga Buga</title>
+    <link rel="icon" href="logo_png.png" type="image/png">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Imperial+Script&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* --- CSS Variables & Reset --- */
+        :root {
+            --primary-color: #ff6b6b; /* Soft Red */
+            --primary-dark: #ee5253;
+            --secondary-color: #2d3436; /* Dark Slate */
+            --accent-color: #feca57; /* Warm Yellow */
+            --light-bg: #ffffff; /* White */
+            --card-bg: #ffffff;
+            --text-color: #2d3436;
+            --text-light: #636e72;
+            --border-radius: 16px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Layout Utilities --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(238, 82, 83, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(238, 82, 83, 0.6);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover, .btn-outline.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(240, 240, 240, 0.95);
+            backdrop-filter: blur(10px);
+            background: rgba(240, 240, 240, 1);
+            padding: 15px 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            background: rgba(240, 240, 240, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+
+        .navbar .container {
+            max-width: 100%;
+            padding: 0 60px;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo {
+            font-family: "Imperial Script", system-ui, -apple-system, BlinkMacSystemFont;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: 700;
+            font-size: 1.8rem;
+            transition: var(--transition);
+            font-family: "Imperial Script", system-ui, -apple-system, BlinkMacSystemFont;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        /* --- Language Menu --- */
+        .lang-menu {
+            position: relative;
+            z-index: 1002;
+            margin-right: 15px;
+        }
+
+        .selected-lang {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .selected-lang:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            border-radius: 16px;
+            padding: 8px;
+            min-width: 140px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lang-menu:hover .lang-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .lang-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .lang-dropdown a:hover {
+            background: #fff0f0;
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        /* --- Hero Section --- */
+        header {
+            position: relative;
+            height: 60vh;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+            margin-bottom: 40px;
+            border-radius: 0 0 30px 30px;
+        }
+
+        .slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .slide-title {
+            font-family: "Imperial Script", system-ui, -apple-system, BlinkMacSystemFont;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .slide-subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 1.2rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-btn:hover {
+            background: rgba(255,255,255,0.4);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev-btn { left: 20px; }
+        .next-btn { right: 20px; }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        h1 { 
+            font-size: 3.5rem; 
+            margin-bottom: 10px; 
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+        
+        .restaurant-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            font-size: 0.95rem;
+        }
+
+        .info-item {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .rating-stars { color: var(--accent-color); }
+
+        /* --- Controls Section (Search/Filter) --- */
+        .controls {
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .controls-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+        }
+        .filter-group::-webkit-scrollbar { display: none; }
+
+        .filter-group .btn {
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .search-group input, .sort-group select {
+            padding: 12px 20px;
+            border: 2px solid #eee;
+            border-radius: 50px;
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .search-group input:focus, .sort-group select:focus {
+            border-color: var(--primary-color);
+        }
+
+        /* --- Menu Grid --- */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .menu-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .card-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+            background-color: #eee;
+        }
+
+        .card-content {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .card-header-row h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .item-category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .item-desc {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .item-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .badge {
+            background: var(--accent-color);
+            color: #333;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 2;
+        }
+
+        /* --- Reviews Section --- */
+        .reviews-section {
+            margin-top: 40px;
+        }
+        
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .reviews-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .review-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            box-shadow: var(--shadow);
+        }
+
+        .reviewer-name { font-weight: 700; margin-bottom: 5px; color: var(--secondary-color); }
+        .review-text { font-style: italic; color: var(--text-light); }
+
+        /* --- Modal (Add New Item) --- */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0,0,0,0.5); 
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 60px 0 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .footer-column {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            flex: 1;
+        }
+
+        .footer-column h3 {
+            color: var(--accent-color);
+            font-size: 2rem;
+            margin-bottom: 25px;
+            font-family: "Imperial Script", system-ui, -apple-system, BlinkMacSystemFont;
+            text-transform: none;
+            letter-spacing: 1px;
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+            color: #ddd;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 5px;
+        }
+
+        .footer-column ul li.today {
+            color: var(--accent-color);
+            font-weight: bold;
+            border-bottom: 1px solid var(--accent-color);
+        }
+
+        .footer-column p {
+            color: #ddd;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            text-align: center;
+            color: #aaa;
+        }
+
+        .payment-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .payment-logos img {
+            height: 25px;
+            width: auto;
+            border-radius: 4px;
+        }
+
+        .hidden { display: none; }
+
+        /* Mobile Tweaks */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            header { padding: 60px 20px 40px; }
+            .controls-top { flex-direction: column; align-items: stretch; }
+            .footer-content { flex-direction: column; }
+            
+            /* Mobile Nav */
+            .menu-toggle { display: flex; }
+            
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                gap: 20px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                transition: 0.4s ease-in-out;
+                transform: none;
+            }
+
+            .nav-links.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+            
+            .nav-links li { width: 100%; text-align: center; }
+            .about-logo { min-height: 300px; }
+        }
+
+        /* --- About Section --- */
+        .about-section {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: stretch;
+            gap: 40px;
+            margin-bottom: 60px;
+            padding: 20px 5%;
+            width: 100%;
+            
+        }
+
+        .about-logo {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            justify-content: center;
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: all 1s ease-out;
+            position: relative;
+        }
+
+        .about-logo.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .about-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .about-text {
+            flex: 1.5;
+            min-width: 300px;
+            padding: 20px;
+            background-color: #fff9f9; /* Light warm tint */
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            animation: borderGlow 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes borderGlow {
+            0% {
+                border-color: var(--primary-color);
+                box-shadow: 0 10px 30px rgba(255, 107, 107, 0.1);
+            }
+            100% {
+                border-color: var(--accent-color);
+                box-shadow: 0 10px 30px rgba(254, 202, 87, 0.25);
+            }
+        }
+
+        .about-text h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-family: "Imperial Script", system-ui, -apple-system, BlinkMacSystemFont;
+            font-size: 48px;
+            font-weight: 700;
+            font-style: normal;
+            line-height: 48px;
+            letter-spacing: normal;
+            text-transform: none;
+            text-decoration: none;
+        }
+
+        .about-text h3 {
+            color: var(--secondary-color);
+            margin-top: 25px;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .about-text p {
+            color: var(--text-light);
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        /* --- Category Section --- */
+        .category-section {
+            padding: 60px 5%;
+            width: 100%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--secondary-color);
+            font-weight: 700;
+        }
+
+        .category-section .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            font-family: "Imperial Script", system-ui, -apple-system, BlinkMacSystemFont;
+            font-size: 48px;
+            font-weight: 700;
+            font-style: normal;
+            line-height: 48px;
+            letter-spacing: normal;
+            text-transform: none;
+            text-decoration: none;
+            color: #111827;
+        }
+
+        .category-section .section-title::before,
+        .category-section .section-title::after {
+            content: "";
+            height: 3px;
+            width: 120px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 50px;
+            margin-top: -30px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .category-card {
+            background-color: transparent;
+            height: 350px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .category-card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-face-front {
+            color: white;
+        }
+
+        .card-face-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            z-index: 1;
+            transition: transform 0.4s ease;
+        }
+        
+        .category-card:hover .card-face-front img {
+            transform: scale(1.1);
+        }
+
+        .card-face-front::after { /* Overlay */
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.1));
+            z-index: 2;
+        }
+
+        .card-face-front h3 {
+            position: relative;
+            z-index: 3;
+            font-size: 1.8rem;
+            margin-top: auto;
+            padding: 25px;
+            text-align: center;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .card-face-back {
+            background-color: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--primary-color);
+        }
+
+        .full-menu-cta {
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .full-menu-cta p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        /* --- Gallery Section --- */
+        .gallery-section {
+            padding: 60px 0;
+            overflow: hidden;
+            background-color: var(--light-bg);
+            background-color: #f4f4f4;
+        }
+
+        .gallery-strip {
+            background-color: #1a1a1a;
+            position: relative;
+            padding: 40px 0;
+            margin-bottom: 40px;
+        }
+
+        /* Film Strip Effect */
+        .gallery-strip::before,
+        .gallery-strip::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background-image: repeating-linear-gradient(
+                90deg,
+                #e0e0e0 0,
+                #e0e0e0 20px,
+                transparent 20px,
+                transparent 40px
+            );
+            z-index: 5;
+        }
+
+        .gallery-strip::before { top: 5px; }
+        .gallery-strip::after { bottom: 5px; }
+
+        .gallery-section .section-title {
+            color: var(--secondary-color);
+            font-family: "Imperial Script", system-ui, -apple-system, BlinkMacSystemFont;
+            font-size: 48px;
+            font-weight: 700;
+            font-style: normal;
+            line-height: 48px;
+            letter-spacing: normal;
+            text-transform: none;
+            text-decoration: none;
+        }
+
+        .gallery-marquee {
+            display: flex;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .gallery-marquee:hover .gallery-track {
+            animation-play-state: paused;
+        }
+
+        .gallery-track {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding-left: 20px; /* Initial offset */
+            animation: scrollGallery 30s linear infinite;
+        }
+
+        .gallery-item {
+            width: 300px;
+            height: 200px;
+            border-radius: var(--border-radius);
+            object-fit: cover;
+            box-shadow: var(--shadow);
+            filter: grayscale(100%);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            filter: grayscale(0%);
+            transform: scale(1.1);
+        }
+
+        @keyframes scrollGallery {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .gallery-cta {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* --- Events Section --- */
+        .events-section {
+            position: relative;
+            background: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1920&q=80') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+            padding: 80px 0;
+            color: white;
+            text-align: center;
+        }
+
+        .events-section .section-title {
+            font-family: "Imperial Script", system-ui, -apple-system, BlinkMacSystemFont;
+            font-size: 48px;
+            font-weight: 700;
+            font-style: normal;
+            line-height: 48px;
+            letter-spacing: normal;
+            text-transform: none;
+            text-decoration: none;
+        }
+
+        .events-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.75); /* Dark overlay */
+        }
+
+        .events-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .event-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px 20px;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: var(--transition);
+        }
+
+        .event-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+
+        .event-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+
+        .event-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        .event-card p {
+            color: #ddd;
+            font-size: 1.1rem;
+        }
+
+        /* --- Customer Reviews Section --- */
+        .customer-reviews-section {
+            padding: 40px 0;
+            background-color: #f9f9f9;
+            overflow: hidden;
+        }
+
+        .reviews-marquee {
+            display: flex;
+            overflow: hidden;
+            user-select: none;
+            padding: 10px 0;
+        }
+
+        .reviews-track {
+            display: flex;
+            gap: 30px;
+            animation: scrollReviews 60s linear infinite;
+            width: max-content;
+        }
+
+        .reviews-marquee:hover .reviews-track {
+            animation-play-state: paused;
+        }
+
+        .customer-review-card {
+            background: white;
+            padding: 12px;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            width: 350px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            gap: 6px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .customer-review-card:hover {
+            transform: scale(1.02);
+        }
+
+        .customer-review-card .review-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .customer-review-card .rating-stars {
+            margin-bottom: 0;
+            font-size: 1rem;
+        }
+
+        .customer-review-card .reviewer-name {
+            font-weight: 700;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+        }
+
+        .customer-review-card .review-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .reviews-actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        @keyframes scrollReviews {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .customer-reviews-section .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            font-family: "Imperial Script", system-ui, -apple-system, BlinkMacSystemFont;
+            font-size: 48px;
+            font-weight: 700;
+            font-style: normal;
+            line-height: 48px;
+            letter-spacing: normal;
+            text-align: center;
+            text-transform: none;
+            text-decoration: none;
+            color: #111827;
+            margin-bottom: 15px;
+        }
+
+        .customer-reviews-section .section-title::before,
+        .customer-reviews-section .section-title::after {
+            content: "";
+            height: 3px;
+            width: 120px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        /* --- Map Section --- */
+        .map-section {
+            padding: 60px 0;
+            background-color: var(--light-bg);
+        }
+
+        .map-section .section-title {
+            font-family: "Imperial Script", system-ui, -apple-system, BlinkMacSystemFont;
+            font-size: 48px;
+            font-weight: 700;
+            font-style: normal;
+            line-height: 48px;
+            letter-spacing: normal;
+            text-align: center;
+            text-transform: none;
+            text-decoration: none;
+            color: #111827;
+            margin-bottom: 15px;
+        }
+
+        .visit-content {
+            display: flex;
+            gap: 20px;
+            height: 450px;
+        }
+
+        .reel-container {
+            width: 260px;
+            height: 100%;
+            flex-shrink: 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--primary-color);
+        }
+
+        .map-container {
+            flex-grow: 1;
+            height: 100%;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .visit-content { flex-direction: column; height: auto; }
+            .reel-container { width: 100%; height: 450px; }
+            .map-container { width: 100%; height: 450px; }
+        }
+
+        /* --- Scroll to Top Button --- */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(20px);
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        /* --- Scroll Progress Bar --- */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            z-index: 2000;
+            background: transparent;
+        }
+
+        .progress-bar {
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+            width: 0%;
+            border-radius: 0 2px 2px 0;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .progress-bar.visible {
+            opacity: 1;
+        }
+
+        .modal-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            font-size: 2rem;
+            padding: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 50%;
+            z-index: 2001;
+            user-select: none;
+        }
+        .modal-nav-btn:hover { background: rgba(255,255,255,0.3); }
+        .prev-btn { left: 20px; }
+        .next-btn { right: 20px; }
+
+        /* --- Image Modal --- */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .image-modal.show { opacity: 1; }
+        .image-modal-content {
+            max-width: 98%;
+            max-height: 95vh;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            transform: scale(0.7);
+            transition: transform 0.3s ease;
+        }
+        .image-modal.show .image-modal-content { transform: scale(1); }
+        #imageCaption {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Scroll Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="scrollProgressBar"></div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo"><img src="logo_png.png" alt="Pizzeria Buga Buga" style="height: 80px; width: 100px; margin-left: 50px;"></a>
+            <ul class="nav-links">
+                <li><a href="index.html" style="color: var(--primary-color);">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="event.html">Event</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="lang-menu">
+                <div class="selected-lang">
+                    <i class="fas fa-globe"></i> EN
+                </div>
+                <div class="lang-dropdown">
+                    <a href="#">English</a>
+                    <a href="#">Français</a>
+                    <a href="#">العربية</a>
+                </div>
+            </div>
+            <button class="menu-toggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Header / Restaurant Details -->
+    <header>
+        <div class="slider">
+            <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1920&q=80');">
+                <div class="slide-content">
+                    <h2 class="slide-title">Welcome to Pizzeria Buga Buga</h2>
+                    <p style="font-weight: bold;" class="slide-subtitle">Cafe & Restaurant in Tangier</p>
+                </div>
+            </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=1920&q=80');">
+                <div class="slide-content">
+                    <h2 class="slide-title">A World of Flavors Awaits You</h2>
+                    <p style="font-weight: bold;" class="slide-subtitle">Moroccan breakfast, Italian pasta... explore our diverse menu</p>
+                </div>
+            </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1590947132387-155cc02f3212?auto=format&fit=crop&w=1920&q=80');">
+                <div class="slide-content">
+                    <h2 class="slide-title">A Culinary Journey</h2>
+                    <p style="font-weight: bold;" class="slide-subtitle">Travel the world with our Moroccan, Italian, and international dishes.</p>
+                </div>
+            </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1920&q=80');">
+                <div class="slide-content">
+                    <h2 class="slide-title">Celebrate Life’s Moments</h2>
+                    <p style="font-weight: bold;" class="slide-subtitle">Host birthdays, parties, and more in our warm and welcoming setting.</p>
+                </div>
+            </div>
+            <button class="slider-btn prev-btn" aria-label="Previous Slide">&#10094;</button>
+            <button class="slider-btn next-btn" aria-label="Next Slide">&#10095;</button>
+            <div class="slider-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="about-logo">
+            <img src="logo_buga buga.png" alt="Pizzeria Buga Buga Logo">
+        </div>
+        <div class="about-text">
+            <h2>Bienvenue au Pizzeria Buga Buga - Café Restaurant à Tanger</h2>
+            <p>Pizzeria Buga Buga, votre café restaurant incontournable au cœur de Tanger. Plongez dans une ambiance chaleureuse et authentique où le charme de la culture marocaine se mêle à une touche contemporaine. Profitez d’un cadre raffiné et convivial, idéal pour un petit-déjeuner copieux, un déjeuner d’affaires ou un dîner romantique.</p>
+            
+            <h3>Une Pause Gourmande dans le meilleur café de Tanger</h3>
+            <p>Pizzeria Buga Buga, où l'arôme du café fraîchement moulu se mêle à une ambiance conviviale. Nos baristas expérimentés préparent avec soin des cafés de spécialité, des thés marocains authentiques et des jus de fruits frais. Installez-vous sur notre terrasse ensoleillée pour savourer votre boisson préférée, que ce soit pour bien commencer la journée ou pour une pause détente l'après-midi.</p>
+            
+            <h3>Une Expérience Culinaire Inoubliable au meilleur restaurant à Tanger</h3>
+            <p>Pizzeria Buga Buga, où la cuisine marocaine traditionnelle rencontre des influences internationales pour créer une expérience gastronomique unique. Notre menu diversifié met en avant des plats préparés avec des produits locaux de première qualité, reflétant notre engagement envers la fraîcheur et l'authenticité. Que vous optiez pour un déjeuner d'affaires ou un dîner romantique, notre cadre élégant et notre service attentionné garantissent un moment inoubliable.</p>
+        </div>
+    </section>
+
+    <!-- Category Section -->
+    <section class="category-section">
+            <h2 class="section-title">Explore our restaurant menu in Tangier!</h2>
+            <p class="section-subtitle">Discover a wide variety of delicious dishes prepared with love.</p>
+            <div class="category-grid">
+                <div class="category-card">
+                    <div class="card-inner">
+                        <div class="card-face card-face-front">
+                            <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=500&q=60" alt="Breakfast">
+                            <h3>Breakfast</h3>
+                        </div>
+                        <div class="card-face card-face-back"><h3>Breakfast</h3><p>Start your day right.</p></div>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="card-inner">
+                        <div class="card-face card-face-front">
+                            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=60" alt="Full Meals">
+                            <h3>Full Meals</h3>
+                        </div>
+                        <div class="card-face card-face-back"><h3>Full Meals</h3><p>Authentic & hearty dishes.</p></div>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="card-inner">
+                        <div class="card-face card-face-front">
+                            <img src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=500&q=60" alt="Fast Food">
+                            <h3>Fast Food</h3>
+                        </div>
+                        <div class="card-face card-face-back"><h3>Fast Food</h3><p>Quick, fresh & delicious.</p></div>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="card-inner">
+                        <div class="card-face card-face-front">
+                            <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=500&q=60" alt="Desserts">
+                            <h3>Desserts</h3>
+                        </div>
+                        <div class="card-face card-face-back"><h3>Desserts</h3><p>Sweet treats for everyone.</p></div>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="card-inner">
+                        <div class="card-face card-face-front">
+                            <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=500&q=60" alt="Drinks">
+                            <h3>Drinks</h3>
+                        </div>
+                        <div class="card-face card-face-back"><h3>Drinks</h3><p>Cool & refreshing beverages.</p></div>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="card-inner">
+                        <div class="card-face card-face-front">
+                            <img src="https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?auto=format&fit=crop&w=500&q=60" alt="Extras">
+                            <h3>Extras</h3>
+                        </div>
+                        <div class="card-face card-face-back"><h3>Extras</h3><p>Complete your meal.</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="full-menu-cta">
+                <p>Want to see more? Check out our full menu!</p>
+                <a href="#menuContainer" class="btn btn-primary">View Full Menu</a>
+            </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section" id="gallery">
+        <h2 class="section-title">Our Photo Gallery</h2>
+        <div class="gallery-strip">
+        <div class="gallery-marquee">
+            <div class="gallery-track">
+                <!-- Images (Repeated for seamless loop) -->
+                <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80" alt="Delicious Pizza" class="gallery-item" onclick="openImageModal(this.src, this.alt)">
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80" alt="Restaurant Interior" class="gallery-item" onclick="openImageModal(this.src, this.alt)">
+                <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=600&q=80" alt="Chef Cooking" class="gallery-item" onclick="openImageModal(this.src, this.alt)">
+                <img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=600&q=80" alt="Pasta Dish" class="gallery-item" onclick="openImageModal(this.src, this.alt)">
+                <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80" alt="Tacos" class="gallery-item" onclick="openImageModal(this.src, this.alt)">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" alt="Burger" class="gallery-item" onclick="openImageModal(this.src, this.alt)">
+                <!-- Duplicate set -->
+                <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80" alt="Delicious Pizza" class="gallery-item" onclick="openImageModal(this.src, this.alt)">
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80" alt="Restaurant Interior" class="gallery-item" onclick="openImageModal(this.src, this.alt)">
+                <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=600&q=80" alt="Chef Cooking" class="gallery-item" onclick="openImageModal(this.src, this.alt)">
+                <img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=600&q=80" alt="Pasta Dish" class="gallery-item" onclick="openImageModal(this.src, this.alt)">
+                <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80" alt="Tacos" class="gallery-item" onclick="openImageModal(this.src, this.alt)">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" alt="Burger" class="gallery-item" onclick="openImageModal(this.src, this.alt)">
+            </div>
+        </div>
+        </div>
+        <div class="gallery-cta">
+            <a href="#" class="btn btn-primary">View Full Gallery</a>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section class="events-section" id="events">
+        <div class="events-content">
+            <h2 class="section-title" style="color: white;">Celebrate Your Events with Us!</h2>
+            <p class="section-subtitle" style="color: #ddd;">Discover the perfect venue for your special moments at Pizzeria Buga Buga in Tangier. Whether it's a birthday, graduation party, or corporate event, we create unforgettable memories tailored to your needs.</p>
+            
+            <div class="events-grid">
+                <div class="event-card">
+                    <img src="https://images.unsplash.com/photo-1558636508-e0db3814bd1d?auto=format&fit=crop&w=200&q=80" alt="Birthday" class="event-image">
+                    <h3>Birthdays</h3>
+                    <p>Unforgettable Birthdays</p>
+                </div>
+                <div class="event-card">
+                    <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=200&q=80" alt="Graduation" class="event-image">
+                    <h3>Graduation Parties</h3>
+                    <p>Graduation Parties</p>
+                </div>
+                <div class="event-card">
+                    <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=200&q=80" alt="Family" class="event-image">
+                    <h3>Family Gatherings</h3>
+                    <p>Family Gatherings</p>
+                </div>
+                <div class="event-card">
+                    <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=200&q=80" alt="Professional" class="event-image">
+                    <h3>Professional Events</h3>
+                    <p>Professional Events</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 50px;">
+                <button class="btn btn-primary">View Full Events</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Reviews Section -->
+    <section class="customer-reviews-section">
+        <h2 class="section-title">What Do Our Customers Think?</h2>
+        <div class="reviews-marquee">
+            <div class="reviews-track">
+                <!-- Reviews Set 1 -->
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">najia</div>
+                    </div>
+                    <p class="review-text">"A restaurant that has become our headquarters for both breakfast and dinner. We felt at home, as the staff is always attentive and very professional. We have never been disappointed by the meals, pizzas, burgers, salads, pasta, and breakfasts; everything is excellent. The portions are generous and, above all, delicious. The products are fresh and of high quality."</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">Ani Berkma</div>
+                    </div>
+                    <p class="review-text">"Excellent restaurant where we enjoyed our breakfast. It is excellent, abundant, and of very good quality. The interior is magnificent and do not be deceived by the exterior. Service is excellent and very attentive. The quality/price ratio is unbeatable; we will definitely return."</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">Yasmine Oulad</div>
+                    </div>
+                    <p class="review-text">"As a welcome gesture, they offer a date stuffed with walnuts! The service is very friendly, very fast, and above all, the prices are unbeatable! We will always come back!"</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">Tecmob Sarl</div>
+                    </div>
+                    <p class="review-text">"An incredible experience in this restaurant. The service is exceptional, the atmosphere immerses you in a welcoming environment, and the food is simply delicious. A perfect combination for unforgettable moments! I highly recommend it..."</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">Karima Amimi</div>
+                    </div>
+                    <p class="review-text">"We loved it. Everything was good and fresh. We hope it always stays that way."</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">ADNAN</div>
+                    </div>
+                    <p class="review-text">"The pizza is delicious, the natural avocado and pineapple smoothie is very tasty, and the tiramisu is exceptional 😍. I highly recommend it 🔝!"</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">Andrés Kampa92</div>
+                    </div>
+                    <p class="review-text">"Dine-in | Dinner. An exceptional place for breakfast and dinner. If you go to Tangier, you must stop by; you will be amazed!"</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">Ahmed K.</div>
+                    </div>
+                    <p class="review-text">"Best tacos in Tanger! The cheese sauce is amazing."</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">Sarah L.</div>
+                    </div>
+                    <p class="review-text">"Good pizza, nice crust. Delivery was fast."</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐</div>
+                        <div class="reviewer-name">Youssef B.</div>
+                    </div>
+                    <p class="review-text">"Decent food for the price, but the place gets very busy."</p>
+                </div>
+                <!-- Duplicate Set for Scrolling -->
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">najia</div>
+                    </div>
+                    <p class="review-text">"A restaurant that has become our headquarters for both breakfast and dinner. We felt at home, as the staff is always attentive and very professional. We have never been disappointed by the meals, pizzas, burgers, salads, pasta, and breakfasts; everything is excellent. The portions are generous and, above all, delicious. The products are fresh and of high quality."</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">Ani Berkma</div>
+                    </div>
+                    <p class="review-text">"Excellent restaurant where we enjoyed our breakfast. It is excellent, abundant, and of very good quality. The interior is magnificent and do not be deceived by the exterior. Service is excellent and very attentive. The quality/price ratio is unbeatable; we will definitely return."</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">Yasmine Oulad</div>
+                    </div>
+                    <p class="review-text">"As a welcome gesture, they offer a date stuffed with walnuts! The service is very friendly, very fast, and above all, the prices are unbeatable! We will always come back!"</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">Tecmob Sarl</div>
+                    </div>
+                    <p class="review-text">"An incredible experience in this restaurant. The service is exceptional, the atmosphere immerses you in a welcoming environment, and the food is simply delicious. A perfect combination for unforgettable moments! I highly recommend it..."</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">Karima Amimi</div>
+                    </div>
+                    <p class="review-text">"We loved it. Everything was good and fresh. We hope it always stays that way."</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">ADNAN</div>
+                    </div>
+                    <p class="review-text">"The pizza is delicious, the natural avocado and pineapple smoothie is very tasty, and the tiramisu is exceptional 😍. I highly recommend it 🔝!"</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">Andrés Kampa92</div>
+                    </div>
+                    <p class="review-text">"Dine-in | Dinner. An exceptional place for breakfast and dinner. If you go to Tangier, you must stop by; you will be amazed!"</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">Ahmed K.</div>
+                    </div>
+                    <p class="review-text">"Best tacos in Tanger! The cheese sauce is amazing."</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐⭐</div>
+                        <div class="reviewer-name">Sarah L.</div>
+                    </div>
+                    <p class="review-text">"Good pizza, nice crust. Delivery was fast."</p>
+                </div>
+                <div class="customer-review-card" onclick="window.open('https://www.google.com/search?hl=en-MA&gl=ma&q=gh2+ma.6,+Pizzeria+Buga+Buga,+2+res+assafae+2+(azibou1,+Tanger+90000&ludocid=11265624520955092693&lsig=AB86z5W6tzbMIde5oFE1LPqraqpy&hl=en&gl=MA#lrd=', '_blank')">
+                    <div class="review-header">
+                        <div class="rating-stars">⭐⭐⭐</div>
+                        <div class="reviewer-name">Youssef B.</div>
+                    </div>
+                    <p class="review-text">"Decent food for the price, but the place gets very busy."</p>
+                </div>
+            </div>
+        </div>
+        <div class="reviews-actions">
+            <a href="#" class="btn btn-primary">Leave your review of our Sat Village restaurant - Tangier!</a>
+            <a href="#" class="btn btn-primary">Leave your review of our Ibn Batouta restaurant - Tangier!</a>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="map-section">
+        <div class="container">
+            <h2 class="section-title">Visit Us</h2>
+            <div class="visit-content">
+                <div class="reel-container">
+                    <iframe src="https://www.instagram.com/reel/DPh5yReCE-G/embed" width="100%" height="100%" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+                </div>
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2370.389805824291!2d-5.905833842821245!3d35.705900576925615!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd0b89db3c39cadd%3A0x9c5789d060755ed5!2sPizzeria%20Buga%20Buga!5e1!3m2!1sen!2sma!4v1767109959906!5m2!1sen!2sma" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTopBtn" class="scroll-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <!-- Left: Contact Us -->
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <p><strong>Pizzeria Buga Buga</strong></p>
+                    <p>📍 gh2 ma.6, 2 res assafae 2<br>azibou1, Tanger 90000</p>
+                    <p>📞 0531-284484</p>
+                    <button class="btn btn-primary" onclick="openContactModal()" style="margin-top: 15px; width: 100%;">Contact Us</button>
+                    <div style="margin-top: 20px; display: flex; gap: 20px; justify-content: center;">
+                        <a href="https://www.facebook.com/profile.php?id=61581140463045" target="_blank" style="color: white; font-size: 1.8rem; text-decoration: none;"><i class="fab fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/pizzeriabugabuga/" target="_blank" style="color: white; font-size: 1.8rem; text-decoration: none;"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <!-- Center: Opening Hours -->
+                <div class="footer-column">
+                    <h3>Opening Hours</h3>
+                    <ul>
+                        <li data-day="1"><span>Monday</span> <span>8h - 00h</span></li>
+                        <li data-day="2"><span>Tuesday</span> <span>8h - 00h</span></li>
+                        <li data-day="3"><span>Wednesday</span> <span>8h - 00h</span></li>
+                        <li data-day="4"><span>Thursday</span> <span>8h - 00h</span></li>
+                        <li data-day="5"><span>Friday</span> <span>8h - 1h</span></li>
+                        <li data-day="6"><span>Saturday</span> <span>8h - 1h</span></li>
+                        <li data-day="0"><span>Sunday</span> <span>8h - 00h</span></li>
+                    </ul>
+                </div>
+
+                <!-- Right: Delivery & Payment -->
+                <div class="footer-column">
+                    <h3>Delivery Service</h3>
+                    <p>Order online and get it delivered to your doorstep.</p>
+                    <a href="https://glovoapp.com" target="_blank" class="btn btn-primary" style="margin-bottom: 30px; width: 100%;">Order on Glovo</a>
+                    
+                    <h3>Payment Methods</h3>
+                    <div class="payment-logos">
+                        <img src="zarka-200.webp" alt="Cash Payment">
+                        <img src="MasterCard_Logo.png" alt="MasterCard">
+                        <img src="VISA-logo.jpg" alt="Visa">
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 Pizzeria Buga Buga. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="image-modal">
+        <span class="close-modal-btn" onclick="closeImageModal()" style="color: white; font-size: 2rem; top: 20px; right: 30px; position: absolute;">&times;</span>
+        <img class="image-modal-content" id="expandedImage">
+        <button class="modal-nav-btn prev-btn" onclick="changeImage(-1)">&#10094;</button>
+        <button class="modal-nav-btn next-btn" onclick="changeImage(1)">&#10095;</button>
+        <div id="imageCaption"></div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <h2 style="margin-bottom: 20px; color: var(--secondary-color);">Get in Touch</h2>
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
+                <a href="https://wa.me/212631154799" target="_blank" class="btn" style="background-color: #25D366; color: white; min-width: 160px;">
+                    <i class="fab fa-whatsapp" style="font-size: 1.2rem;"></i> WhatsApp
+                </a>
+                <a href="tel:+212531284484" class="btn" style="background-color: #3498db; color: white; min-width: 160px;">
+                    <i class="fas fa-phone-alt" style="font-size: 1.2rem;"></i> Call Now
+                </a>
+            </div>
+            <button class="btn btn-outline" onclick="closeContactModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Initialization ---
+        function init() {
+            setupEventListeners();
+            startSlider();
+            triggerAnimations();
+            highlightToday();
+        }
+
+        // --- Event Listeners ---
+
+        function setupEventListeners() {
+            // Mobile Menu Toggle
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+
+            // Navbar Scroll Effect
+            const navbar = document.querySelector('.navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 10) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Scroll to Top Logic
+            const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+            if (scrollToTopBtn) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300) {
+                        scrollToTopBtn.classList.add('visible');
+                    } else {
+                        scrollToTopBtn.classList.remove('visible');
+                    }
+                });
+
+                scrollToTopBtn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            // Scroll Progress Bar Logic
+            const progressBar = document.getElementById("scrollProgressBar");
+            window.addEventListener('scroll', () => {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                
+                if (progressBar) {
+                    progressBar.style.width = scrolled + "%";
+                    if (winScroll > 0) {
+                        progressBar.classList.add('visible');
+                    } else {
+                        progressBar.classList.remove('visible');
+                    }
+                }
+            });
+        }
+
+        // --- Slider Logic ---
+        function startSlider() {
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.dot');
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
+            let currentSlide = 0;
+            let slideInterval;
+
+            function showSlide(index) {
+                slides[currentSlide].classList.remove('active');
+                dots[currentSlide].classList.remove('active');
+                currentSlide = (index + slides.length) % slides.length; // Handle wrapping
+                slides[currentSlide].classList.add('active');
+                dots[currentSlide].classList.add('active');
+            }
+
+            function nextSlide() {
+                showSlide(currentSlide + 1);
+            }
+
+            // Auto play
+            slideInterval = setInterval(nextSlide, 4000);
+
+            // Manual Navigation
+            const resetTimer = () => {
+                clearInterval(slideInterval);
+                slideInterval = setInterval(nextSlide, 4000);
+            };
+
+            nextBtn.addEventListener('click', () => { nextSlide(); resetTimer(); });
+            prevBtn.addEventListener('click', () => { showSlide(currentSlide - 1); resetTimer(); });
+            
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    showSlide(index);
+                    resetTimer();
+                });
+            });
+        }
+
+        // --- Animations ---
+        function triggerAnimations() {
+            const aboutLogo = document.querySelector('.about-logo');
+            if (aboutLogo) {
+                setTimeout(() => aboutLogo.classList.add('visible'), 100);
+            }
+        }
+
+        // --- Highlight Current Day ---
+        function highlightToday() {
+            const today = new Date().getDay(); // 0 is Sunday, 1 is Monday, etc.
+            const dayItem = document.querySelector(`.footer-column ul li[data-day="${today}"]`);
+            if (dayItem) {
+                dayItem.classList.add('today');
+            }
+        }
+
+        // --- Contact Modal Logic ---
+        function openContactModal() {
+            document.getElementById('contactModal').style.display = "flex";
+        }
+
+        function closeContactModal() {
+            document.getElementById('contactModal').style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('contactModal');
+            const imageModal = document.getElementById('imageModal');
+            if (event.target == modal) closeContactModal();
+            if (event.target == imageModal) closeImageModal();
+        }
+
+        // --- Image Modal Logic ---
+        let currentImageIndex = 0;
+        let galleryImages = [];
+
+        function openImageModal(src, alt) {
+            // Collect all gallery items
+            const items = document.querySelectorAll('.gallery-item');
+            galleryImages = Array.from(items).map(item => ({
+                src: item.src,
+                alt: item.alt
+            }));
+
+            // Find index of clicked image
+            currentImageIndex = galleryImages.findIndex(img => img.src === src);
+            if (currentImageIndex === -1) currentImageIndex = 0;
+
+            updateModalImage();
+
+            const modal = document.getElementById('imageModal');
+            modal.style.display = "flex";
+            setTimeout(() => modal.classList.add('show'), 10);
+        }
+
+        function changeImage(direction) {
+            currentImageIndex = (currentImageIndex + direction + galleryImages.length) % galleryImages.length;
+            updateModalImage();
+        }
+
+        function updateModalImage() {
+            const img = document.getElementById('expandedImage');
+            const caption = document.getElementById('imageCaption');
+            img.src = galleryImages[currentImageIndex].src;
+            caption.textContent = galleryImages[currentImageIndex].alt;
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = "none", 300);
+        }
+
+        // Run App
+        init();
+
+    </script>
+</body>
+</html>
