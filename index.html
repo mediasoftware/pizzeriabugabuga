@@ -712,7 +712,7 @@
         .hidden { display: none; }
 
         /* Mobile Tweaks */
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             h1 { font-size: 2.5rem; }
             header { padding: 60px 20px 40px; }
             .controls-top { flex-direction: column; align-items: stretch; }
@@ -742,6 +742,9 @@
             
             .nav-links li { width: 100%; text-align: center; }
             .about-logo { min-height: 300px; }
+            .category-grid {
+                grid-template-columns: 1fr !important;
+            }
         }
 
         /* --- About Section --- */
@@ -877,7 +880,7 @@
 
         .category-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
         }
 
